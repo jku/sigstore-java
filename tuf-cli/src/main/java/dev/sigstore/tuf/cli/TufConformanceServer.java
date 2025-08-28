@@ -89,20 +89,8 @@ public class TufConformanceServer {
       System.setOut(outPs);
       System.setErr(errPs);
 
-      if (executeRequest.faketime != null && !executeRequest.faketime.isEmpty()) {
-        String faketime = executeRequest.faketime;
-        Instant fakeNow;
-        try {
-          long offsetSeconds = Long.parseLong(faketime);
-          fakeNow = Instant.now().plusSeconds(offsetSeconds);
-        } catch (NumberFormatException e) {
-          throw new IOException(
-              "Faketime must be a relative offset in seconds (e.g., '+3600' or '-3600'), but was: "
-                  + faketime,
-              e);
-        }
-        TestClock.set(Clock.fixed(fakeNow, ZoneOffset.UTC));
-      }
+      Instant fakeNow = Instant.ofEpochSecond(Long.parseLong(executeRequest.faketime));
+      TestClock.set(Clock.fixed(fakeNow, ZoneOffset.UTC));
 
       List<String> resolvedArgs = new java.util.ArrayList<>();
       resolvedArgs.addAll(Arrays.asList(executeRequest.args));

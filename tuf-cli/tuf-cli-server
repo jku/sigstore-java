@@ -14,9 +14,9 @@ if [[ $ARGS_JSON == *, ]]; then
 fi
 ARGS_JSON="$ARGS_JSON]"
 
-FAKETIME_VAL="${FAKETIME:-}"
+DATE_VAL="$(date +%s)"
 
-JSON_PAYLOAD=$(jq -nc --arg cwd "$CWD" --argjson args "$ARGS_JSON" --arg faketime "$FAKETIME_VAL" '{"cwd": $cwd, "args": $args, "faketime": $faketime}')
+JSON_PAYLOAD=$(jq -nc --arg cwd "$CWD" --argjson args "$ARGS_JSON" --arg faketime "$DATE_VAL" '{"cwd": $cwd, "args": $args, "faketime": $faketime}')
 
 RESPONSE=$(curl -s -X POST --header "Content-Type: application/json" --data-binary "$JSON_PAYLOAD" http://localhost:8080/execute)
 
